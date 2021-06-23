@@ -27,7 +27,6 @@ internal final class WebSocketImpl: NSObject, WebSocket {
 
 	init(url: URL) {
 		impl = SRWebSocket(url: url)
-		impl.delegateDispatchQueue = DispatchQueue(label: "com.gonzalezreal.DirectLine.WebSocketImpl")
 	}
 
 	func open() {
@@ -46,8 +45,9 @@ extension WebSocketImpl: SRWebSocketDelegate {
 		os_log("didOpen: %{public}@", log: .wss, type: .debug, webSocket.url!.absoluteString)
 	}
 
-	func webSocket(_ webSocket: SRWebSocket, didReceiveMessageWith string: String) {
-		guard !string.isEmpty else { return }
+    func webSocket(_ webSocket: SRWebSocket!, didReceiveMessage message: Any!) {
+		guard let string = message as? String,
+              !string.isEmpty else { return }
 
 		os_log("didReceiveMessage:\n%{public}@\n", log: .wss, type: .debug, string)
 		didReceiveMessage(string.data(using: .utf8)!)
