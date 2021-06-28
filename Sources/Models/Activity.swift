@@ -48,6 +48,9 @@ public struct Activity<ChannelData: Codable>: Codable {
 
 	/// Date and time that the message was sent in the UTC time zone.
 	public let timestamp: Date?
+    
+    /// Name of the operation to invoke or the name of the event.
+    public let name: String?
 
 	/// Type of activity.
 	public let type: ActivityType
@@ -70,12 +73,13 @@ public struct Activity<ChannelData: Codable>: Codable {
 }
 
 public extension Activity {
-	init(attachments: [Attachment] = [], channelData: ChannelData? = nil, from: ChannelAccount, text: String? = nil, textFormat: TextFormat? = nil, type: ActivityType) {
+    init(attachments: [Attachment] = [], channelData: ChannelData? = nil, from: ChannelAccount, text: String? = nil, textFormat: TextFormat? = nil, name: String? = nil, type: ActivityType) {
 		self.attachments = attachments
 		self.channelData = channelData
 		self.from = from
 		self.text = text
 		self.textFormat = textFormat
+        self.name = name
 		self.type = type
 
 		timestamp = nil
