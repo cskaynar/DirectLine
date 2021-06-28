@@ -26,4 +26,5 @@ public enum ActivityType: String, Codable {
 	case ping
 	case deleteUserData
 	case endOfConversation
+    case event
 }

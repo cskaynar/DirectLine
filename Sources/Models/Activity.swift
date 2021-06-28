@@ -95,6 +95,10 @@ public extension Activity {
 	static func message(from: ChannelAccount, text: String, channelData: ChannelData, attachments: [Attachment] = []) -> Activity {
 		return Activity(attachments: attachments, channelData: channelData, from: from, text: text, type: .message)
 	}
+    
+    static func event(from: ChannelAccount, channelData: ChannelData, attachments: [Attachment] = [], name: String? = nil) -> Activity {
+        return Activity(attachments: attachments, channelData: channelData, from: from, name: name, type: .event)
+    }
 
 	static func typing(from: ChannelAccount, channelData: ChannelData) -> Activity {
 		return Activity(channelData: channelData, from: from, type: .typing)
@@ -111,4 +115,8 @@ public extension Activity where ChannelData == NoChannelData {
 	static func typing(from: ChannelAccount) -> Activity {
 		return Activity(channelData: nil, from: from, type: .typing)
 	}
+    
+    static func event(from: ChannelAccount, attachments: [Attachment] = [], name: String? = nil) -> Activity {
+        return Activity(attachments: attachments, channelData: nil, from: from, name: name, type: .event)
+    }
 }
