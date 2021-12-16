@@ -69,11 +69,12 @@ public struct Activity<ChannelData: Codable>: Codable {
 		try container.encodeIfPresent(text, forKey: .text)
 		try container.encodeIfPresent(textFormat, forKey: .textFormat)
 		try container.encode(type, forKey: .type)
+        try container.encodeIfPresent(locale, forKey: .locale)
 	}
 }
 
 public extension Activity {
-    init(attachments: [Attachment] = [], channelData: ChannelData? = nil, from: ChannelAccount, text: String? = nil, textFormat: TextFormat? = nil, name: String? = nil, type: ActivityType) {
+    init(attachments: [Attachment] = [], channelData: ChannelData? = nil, from: ChannelAccount, text: String? = nil, textFormat: TextFormat? = nil, name: String? = nil, locale: String? = nil, type: ActivityType) {
 		self.attachments = attachments
 		self.channelData = channelData
 		self.from = from
@@ -81,42 +82,80 @@ public extension Activity {
 		self.textFormat = textFormat
         self.name = name
 		self.type = type
-
+        self.locale = locale
+        
 		timestamp = nil
 		attachmentLayout = nil
 		id = ""
 		inputHint = nil
-		locale = nil
 		replyToId = nil
 		speak = nil
 		suggestedActions = nil
 	}
 
-	static func message(from: ChannelAccount, text: String, channelData: ChannelData, attachments: [Attachment] = []) -> Activity {
-		return Activity(attachments: attachments, channelData: channelData, from: from, text: text, type: .message)
+    static func message(from: ChannelAccount, text: String, channelData: ChannelData, attachments: [Attachment] = [], locale: String? = nil) -> Activity {
+        return Activity(
+            attachments: attachments,
+            channelData: channelData,
+            from: from,
+            text: text,
+            locale: locale,
+            type: .message
+        )
 	}
     
-    static func event(from: ChannelAccount, channelData: ChannelData, attachments: [Attachment] = [], name: String? = nil) -> Activity {
-        return Activity(attachments: attachments, channelData: channelData, from: from, name: name, type: .event)
+    static func event(from: ChannelAccount, channelData: ChannelData, attachments: [Attachment] = [], name: String? = nil, locale: String? = nil) -> Activity {
+        return Activity(
+            attachments: attachments,
+            channelData: channelData,
+            from: from,
+            name: name,
+            locale: locale,
+            type: .event
+        )
     }
 
-	static func typing(from: ChannelAccount, channelData: ChannelData) -> Activity {
-		return Activity(channelData: channelData, from: from, type: .typing)
+	static func typing(from: ChannelAccount, channelData: ChannelData, locale: String? = nil) -> Activity {
+		return Activity(
+            channelData: channelData,
+            from: from,
+            locale: locale,
+            type: .typing
+        )
 	}
 }
 
 public typealias NoChannelData = Empty
 
 public extension Activity where ChannelData == NoChannelData {
-	static func message(from: ChannelAccount, text: String, attachments: [Attachment] = []) -> Activity {
-		return Activity(attachments: attachments, channelData: nil, from: from, text: text, type: .message)
+	static func message(from: ChannelAccount, text: String, attachments: [Attachment] = [], locale: String? = nil) -> Activity {
+		return Activity(
+            attachments: attachments,
+            channelData: nil,
+            from: from,
+            text: text,
+            locale: locale,
+            type: .message
+        )
 	}
 
-	static func typing(from: ChannelAccount) -> Activity {
-		return Activity(channelData: nil, from: from, type: .typing)
+	static func typing(from: ChannelAccount, locale: String? = nil) -> Activity {
+		return Activity(
+            channelData: nil,
+            from: from,
+            locale: locale,
+            type: .typing
+        )
 	}
     
-    static func event(from: ChannelAccount, attachments: [Attachment] = [], name: String? = nil) -> Activity {
-        return Activity(attachments: attachments, channelData: nil, from: from, name: name, type: .event)
+    static func event(from: ChannelAccount, attachments: [Attachment] = [], name: String? = nil, locale: String? = nil) -> Activity {
+        return Activity(
+            attachments: attachments,
+            channelData: nil,
+            from: from,
+            name: name,
+            locale: locale,
+            type: .event
+        )
     }
 }
